@@ -1,3 +1,42 @@
+merged_files.txt:
+
+
+pyproject.toml:
+[tool.poetry]
+name = "api"
+version = "0.1.0"
+description = "patterns api"
+authors = ["Peter Vajdecka <peter.vajdecka@oaks.cz>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.13"
+fastapi = "^0.103.1"
+python-dotenv = "^0.21.0"
+openai = "^1.10.0"
+gunicorn = "^21.2.0"
+uvicorn = "^0.29.0"
+pydantic-settings = "^2.3.4"
+tools = "^0.1.9"
+common = "^0.1.2"
+redis = "^5.2.1"
+pymongo = "^4.11.2"
+ollama = "^0.4.7"
+
+[tool.poetry.dev-dependencies]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.1.1"
+black = "^24.4.2"
+flake8 = "^7.1.0"
+isort = "^5.13.2"
+autopep8 = "^2.3.1"
+pre-commit = "^3.7.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
 __main__.py:
 import os
 import uvicorn
@@ -604,4 +643,447 @@ def call_tgi_chat(
     except Exception as e:
         print("err", e)
         raise HTTPException(status_code=500, detail=f"Text Generation Inference API call failed: {e}")
+
+prompts/1_shortcut/openai/few_shot.txt:
+You are a knowledge engineering assistant tasked with creating a new ontology property that connects two classes directly, following the Object Property Chain Shortcutting pattern.
+
+**Examples of desired outputs:**
+
+$few_shot_examples
+
+---
+
+Now, given the following input:
+
+- Class A (A_label): ${A_label}
+  - Property p (p_label): ${p_label}
+    - Domain: ${A_label}
+    - Range: ${B_label}
+
+- Class B (B_label): ${B_label}
+  - Property r (r_label): ${r_label}
+    - Domain: ${B_label}
+    - Range: ${C_label}
+
+- Class C (C_label): ${C_label}
+
+**Goal:**
+
+- Create a new property q that directly connects Class A (${A_label}) to Class C (${C_label}), effectively shortcutting the path through Class B (${B_label}).
+
+**Instructions:**
+
+1. **Understand the Existing Relationships:**
+   - A ${A_label} is associated with ${B_label} via ${p_label}.
+   - ${B_label} is associated with ${C_label} via ${r_label}.
+   - Therefore, a ${A_label} is associated with ${C_label} through the intermediary ${B_label}.
+
+2. **Apply the Object Property Chain Shortcutting Pattern:**
+   - **Objective:** Introduce a new property that captures the transitive relationship between ${A_label} and ${C_label}.
+   - **Semantic Meaning:** The new property should reflect the idea that a ${A_label} directly relates to a ${C_label}.
+
+3. **Create the New Property:**
+   - **Name Suggestion:** Propose a concise and semantically appropriate name for the new property q.
+   - **Domain and Range:**
+     - **Domain:** ${A_label}
+     - **Range:** ${C_label}
+   - **Property Characteristics:**
+     - Should accurately represent the direct relationship between ${A_label} and ${C_label}.
+     - Must align with ontology design best practices and naming conventions.
+
+4. **Provide the Following in Your Response:**
+   - **Suggested Property Name:** The name of the new property q.
+
+**Note:**
+
+- Ensure that the property name is clear, unambiguous, and intuitively understandable by users of the ontology.
+- Avoid using overly technical language or jargon in the property name.
+- The property should facilitate more efficient querying and better visualization within the ontology.
+
+** JSON Output Format **
+
+Please provide your final answer in **valid JSON** format **only**, with the structure:
+{"property_name": "<Your suggested property name>", "explanation": "<A short explanation describing the reasoning or meaning of the property>"}
+
+prompts/1_shortcut/openai/baseline.txt:
+You are a knowledge engineering assistant tasked with creating a new ontology property that connects two classes directly, following the Object Property Chain Shortcutting pattern.
+
+Given:
+
+- Class A (A_label): ${A_label}
+  - Property p (p_label): ${p_label}
+    - Domain: ${A_label}
+    - Range: ${B_label}
+
+- Class B (B_label): ${B_label}
+  - Property r (r_label): ${r_label}
+    - Domain: ${B_label}
+    - Range: ${C_label}
+
+- Class C (C_label): ${C_label}
+
+Goal:
+
+- Create a new property q that directly connects Class A (${A_label}) to Class C (${C_label}), effectively shortcutting the path through Class B (${B_label}).
+
+Instructions:
+
+1. **Understand the Existing Relationships:**
+   - A ${A_label} is associated with ${B_label} via ${p_label}.
+   - ${B_label} is associated with ${C_label} via ${r_label}.
+   - Therefore, a ${A_label} is associated with ${C_label} through the intermediary ${B_label}.
+
+2. **Apply the Object Property Chain Shortcutting Pattern:**
+   - **Objective:** Introduce a new property that captures the transitive relationship between ${A_label} and ${C_label}.
+   - **Semantic Meaning:** The new property should reflect the idea that a ${A_label} directly relates to a ${C_label}.
+
+3. **Create the New Property:**
+   - **Name Suggestion:** Propose a concise and semantically appropriate name for the new property q.
+   - **Domain and Range:**
+     - **Domain:** ${A_label}
+     - **Range:** ${C_label}
+   - **Property Characteristics:**
+     - Should accurately represent the direct relationship between ${A_label} and ${C_label}.
+     - Must align with ontology design best practices and naming conventions.
+
+4. **Provide the Following in Your Response:**
+   - **Suggested Property Name:** The name of the new property q.
+   - **Explanation:** A brief justification for the chosen property name, explaining how it captures the intended relationship.
+
+**Note:**
+
+- Ensure that the property name is clear, unambiguous, and intuitively understandable by users of the ontology.
+- Avoid using overly technical language or jargon in the property name.
+- The property should facilitate more efficient querying and better visualization within the ontology.
+
+** JSON Output Format **
+
+Please provide your final answer in **valid JSON** format **only**, with the structure:
+{"property_name": "<Your suggested property name>", "explanation": "<A short explanation describing the reasoning or meaning of the property>"}
+
+prompts/1_shortcut/ollama/few_shot.txt:
+You are a knowledge engineering assistant tasked with creating a new ontology property that connects two classes directly, following the Object Property Chain Shortcutting pattern.
+
+**Examples of desired outputs:**
+
+$few_shot_examples
+
+---
+
+Now, given the following input:
+
+- Class A (A_label): ${A_label}
+  - Property p (p_label): ${p_label}
+    - Domain: ${A_label}
+    - Range: ${B_label}
+
+- Class B (B_label): ${B_label}
+  - Property r (r_label): ${r_label}
+    - Domain: ${B_label}
+    - Range: ${C_label}
+
+- Class C (C_label): ${C_label}
+
+**Goal:**
+
+- Create a new property q that directly connects Class A (${A_label}) to Class C (${C_label}), effectively shortcutting the path through Class B (${B_label}).
+
+**Instructions:**
+
+1. **Understand the Existing Relationships:**
+   - A ${A_label} is associated with ${B_label} via ${p_label}.
+   - ${B_label} is associated with ${C_label} via ${r_label}.
+   - Therefore, a ${A_label} is associated with ${C_label} through the intermediary ${B_label}.
+
+2. **Apply the Object Property Chain Shortcutting Pattern:**
+   - **Objective:** Introduce a new property that captures the transitive relationship between ${A_label} and ${C_label}.
+   - **Semantic Meaning:** The new property should reflect the idea that a ${A_label} directly relates to a ${C_label}.
+
+3. **Create the New Property:**
+   - **Name Suggestion:** Propose a concise and semantically appropriate name for the new property q.
+   - **Domain and Range:**
+     - **Domain:** ${A_label}
+     - **Range:** ${C_label}
+   - **Property Characteristics:**
+     - Should accurately represent the direct relationship between ${A_label} and ${C_label}.
+     - Must align with ontology design best practices and naming conventions.
+
+4. **Provide the Following in Your Response:**
+   - **Suggested Property Name:** The name of the new property q.
+
+**Note:**
+
+- Ensure that the property name is clear, unambiguous, and intuitively understandable by users of the ontology.
+- Avoid using overly technical language or jargon in the property name.
+- The property should facilitate more efficient querying and better visualization within the ontology.
+
+** JSON Output Format **
+
+Please provide your final answer in **valid JSON** format **only**, use the following schema:
+${output_schema}
+
+prompts/1_shortcut/ollama/baseline.txt:
+You are a knowledge engineering assistant tasked with creating a new ontology property that connects two classes directly, following the Object Property Chain Shortcutting pattern.
+
+Given:
+
+- Class A (A_label): ${A_label}
+  - Property p (p_label): ${p_label}
+    - Domain: ${A_label}
+    - Range: ${B_label}
+
+- Class B (B_label): ${B_label}
+  - Property r (r_label): ${r_label}
+    - Domain: ${B_label}
+    - Range: ${C_label}
+
+- Class C (C_label): ${C_label}
+
+Goal:
+
+- Create a new property q that directly connects Class A (${A_label}) to Class C (${C_label}), effectively shortcutting the path through Class B (${B_label}).
+
+Instructions:
+
+1. **Understand the Existing Relationships:**
+   - A ${A_label} is associated with ${B_label} via ${p_label}.
+   - ${B_label} is associated with ${C_label} via ${r_label}.
+   - Therefore, a ${A_label} is associated with ${C_label} through the intermediary ${B_label}.
+
+2. **Apply the Object Property Chain Shortcutting Pattern:**
+   - **Objective:** Introduce a new property that captures the transitive relationship between ${A_label} and ${C_label}.
+   - **Semantic Meaning:** The new property should reflect the idea that a ${A_label} directly relates to a ${C_label}.
+
+3. **Create the New Property:**
+   - **Name Suggestion:** Propose a concise and semantically appropriate name for the new property q.
+   - **Domain and Range:**
+     - **Domain:** ${A_label}
+     - **Range:** ${C_label}
+   - **Property Characteristics:**
+     - Should accurately represent the direct relationship between ${A_label} and ${C_label}.
+     - Must align with ontology design best practices and naming conventions.
+
+4. **Provide the Following in Your Response:**
+   - **Suggested Property Name:** The name of the new property q.
+   - **Explanation:** A brief justification for the chosen property name, explaining how it captures the intended relationship.
+
+**Note:**
+
+- Ensure that the property name is clear, unambiguous, and intuitively understandable by users of the ontology.
+- Avoid using overly technical language or jargon in the property name.
+- The property should facilitate more efficient querying and better visualization within the ontology.
+
+** JSON Output Format **
+
+Please provide your final answer in **valid JSON** format **only**, use the following schema:
+${output_schema}
+
+prompts/2_subclass/openai/few_shot.txt:
+You are a knowledge engineering assistant tasked with creating a new ontology class that would be a subclass of Class A (${A_label}), following the Subclass Enrichment pattern.
+
+**Examples of desired outputs:**
+
+$few_shot_examples
+
+---
+
+Now, given the following input:
+
+- Class A (${A_label}):
+  - Property p (${p_label}):
+    - Domain: ${A_label}
+    - Range: ${B_label}
+
+- Class B (${B_label})
+
+- Class C (${C_label}), a subclass of ${B_label}
+
+**Goal:**
+
+- Suggest a new class that would be a subclass of ${A_label}, where instances are those that have a ${p_label} relationship to instances of ${C_label}.
+
+**Instructions:**
+
+1. **Understand the Existing Relationships:**
+   - A ${A_label} has a ${p_label} relationship to a ${B_label}.
+   - ${C_label} is a subclass of ${B_label}, meaning every ${C_label} is also a ${B_label}.
+
+2. **Apply the Subclass Enrichment Pattern:**
+   - **Objective:** Introduce a new subclass of ${A_label} that represents ${A_label} instances connected via ${p_label} to ${C_label} instances.
+   - **Semantic Meaning:** The new class should capture the concept of ${A_label} instances specifically related to ${C_label} instances.
+
+3. **Create the New Class:**
+   - **Name Suggestion:** Propose a concise and semantically appropriate name for the new subclass.
+
+4. **Provide the Following in Your Response:**
+   - **Suggested Class Name:** The name of the new subclass.
+
+**Note:**
+
+- Ensure that the class name is clear, unambiguous, and intuitively understandable by users of the ontology.
+- Avoid using overly technical language or jargon in the class name.
+- The new class should facilitate more efficient querying and better organization within the ontology.
+- Provide short explanation of new generated ontology class 
+
+** JSON Output Format **
+
+Please provide your final answer in **valid JSON** format **only**, with the structure:
+{ "class_name": "<Your suggested subclass name>", "explanation": "<A short explanation describing the reasoning or meaning of the subclass>" }
+
+prompts/2_subclass/openai/baseline.txt:
+
+You are a knowledge engineering assistant tasked with creating a new ontology class that would be a subclass of Class A (${A_label}), following the Subclass Enrichment pattern.
+
+Given:
+
+- **Class A (${A_label})**
+- **Property p (${p_label}):**
+  - **Domain:** ${A_label}
+  - **Range:** ${B_label}
+- **Class B (${B_label})**
+- **Class C (${C_label}), a subclass of ${B_label}**
+
+**Goal:**
+
+- **Suggest a new class that would be a subclass of ${A_label}, where instances are those that have a ${p_label} relationship to instances of ${C_label}.**
+
+**Instructions:**
+
+1. **Understand the Existing Relationships:**
+   - A ${A_label} has a ${p_label} relationship to a ${B_label}.
+   - ${C_label} is a subclass of ${B_label}, meaning every ${C_label} is also a ${B_label}.
+
+2. **Apply the Subclass Enrichment Pattern:**
+   - **Objective:** Introduce a new subclass of ${A_label} that represents ${A_label} instances connected via ${p_label} to ${C_label} instances.
+   - **Semantic Meaning:** The new class should capture the concept of ${A_label} instances specifically related to ${C_label} instances.
+
+3. **Create the New Class:**
+   - **Name Suggestion:** Propose a concise and semantically appropriate name for the new subclass.
+   - **Definition:**
+     - The new class should be defined as all ${A_label} instances that have a ${p_label} relationship to ${C_label} instances.
+
+4. **Provide the Following in Your Response:**
+   - **Suggested Class Name:** The name of the new subclass.
+   - **Explanation:** A brief justification for the chosen class name, explaining how it captures the intended concept.
+   - **Definition in Natural Language:** A clear description of the new class.
+
+**Note:**
+
+- Ensure that the class name is clear, unambiguous, and intuitively understandable by users of the ontology.
+- Avoid using overly technical language or jargon in the class name.
+- The new class should facilitate more efficient querying and better organization within the ontology.
+- Provide short explanation of new generated ontology class 
+
+** JSON Output Format **
+
+Please provide your final answer in **valid JSON** format **only**, with the structure:
+{ "class_name": "<Your suggested subclass name>", "explanation": "<A short explanation describing the reasoning or meaning of the subclass>" }
+
+prompts/2_subclass/ollama/few_shot.txt:
+You are a knowledge engineering assistant tasked with creating a new ontology class that would be a subclass of Class A (${A_label}), following the Subclass Enrichment pattern.
+
+**Examples of desired outputs:**
+
+$few_shot_examples
+
+---
+
+Now, given the following input:
+
+- Class A (${A_label}):
+  - Property p (${p_label}):
+    - Domain: ${A_label}
+    - Range: ${B_label}
+
+- Class B (${B_label})
+
+- Class C (${C_label}), a subclass of ${B_label}
+
+**Goal:**
+
+- Suggest a new class that would be a subclass of ${A_label}, where instances are those that have a ${p_label} relationship to instances of ${C_label}.
+
+**Instructions:**
+
+1. **Understand the Existing Relationships:**
+   - A ${A_label} has a ${p_label} relationship to a ${B_label}.
+   - ${C_label} is a subclass of ${B_label}, meaning every ${C_label} is also a ${B_label}.
+
+2. **Apply the Subclass Enrichment Pattern:**
+   - **Objective:** Introduce a new subclass of ${A_label} that represents ${A_label} instances connected via ${p_label} to ${C_label} instances.
+   - **Semantic Meaning:** The new class should capture the concept of ${A_label} instances specifically related to ${C_label} instances.
+
+3. **Create the New Class:**
+   - **Name Suggestion:** Propose a concise and semantically appropriate name for the new subclass.
+
+4. **Provide the Following in Your Response:**
+   - **Suggested Class Name:** The name of the new subclass.
+
+**Note:**
+
+- Ensure that the class name is clear, unambiguous, and intuitively understandable by users of the ontology.
+- Avoid using overly technical language or jargon in the class name.
+- The new class should facilitate more efficient querying and better organization within the ontology.
+- Provide short explanation of new generated ontology class 
+
+** JSON Output Format **
+
+Please provide your final answer in **valid JSON** format **only**, use the following schema:
+${output_schema}
+
+prompts/2_subclass/ollama/baseline.txt:
+You are a knowledge engineering assistant tasked with creating a new ontology property that connects two classes directly, following the Object Property Chain Shortcutting pattern.
+
+Given:
+
+- Class A (A_label): ${A_label}
+  - Property p (p_label): ${p_label}
+    - Domain: ${A_label}
+    - Range: ${B_label}
+
+- Class B (B_label): ${B_label}
+  - Property r (r_label): ${r_label}
+    - Domain: ${B_label}
+    - Range: ${C_label}
+
+- Class C (C_label): ${C_label}
+
+Goal:
+
+- Create a new property q that directly connects Class A (${A_label}) to Class C (${C_label}), effectively shortcutting the path through Class B (${B_label}).
+
+Instructions:
+
+1. **Understand the Existing Relationships:**
+   - A ${A_label} is associated with ${B_label} via ${p_label}.
+   - ${B_label} is associated with ${C_label} via ${r_label}.
+   - Therefore, a ${A_label} is associated with ${C_label} through the intermediary ${B_label}.
+
+2. **Apply the Object Property Chain Shortcutting Pattern:**
+   - **Objective:** Introduce a new property that captures the transitive relationship between ${A_label} and ${C_label}.
+   - **Semantic Meaning:** The new property should reflect the idea that a ${A_label} directly relates to a ${C_label}.
+
+3. **Create the New Property:**
+   - **Name Suggestion:** Propose a concise and semantically appropriate name for the new property q.
+   - **Domain and Range:**
+     - **Domain:** ${A_label}
+     - **Range:** ${C_label}
+   - **Property Characteristics:**
+     - Should accurately represent the direct relationship between ${A_label} and ${C_label}.
+     - Must align with ontology design best practices and naming conventions.
+
+4. **Provide the Following in Your Response:**
+   - **Suggested Property Name:** The name of the new property q.
+   - **Explanation:** A brief justification for the chosen property name, explaining how it captures the intended relationship.
+
+**Note:**
+
+- Ensure that the property name is clear, unambiguous, and intuitively understandable by users of the ontology.
+- Avoid using overly technical language or jargon in the property name.
+- The property should facilitate more efficient querying and better visualization within the ontology.
+
+** JSON Output Format **
+
+Please provide your final answer in **valid JSON** format **only**, use the following schema:
+${output_schema}
 

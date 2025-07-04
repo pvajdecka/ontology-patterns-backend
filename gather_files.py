@@ -71,14 +71,14 @@ def main():
     parser.add_argument(
         "--extensions",
         nargs="+",
-        default=[".py",".txt",".sql",".sh"], # 
+        default=[".py",".txt",".sql",".sh",".toml"], # 
         help='File extensions to include (default: [".py"]). '
              'Example: --extensions ".py" ".txt"',
     )
     parser.add_argument(
         "--exclude-dirs",
         nargs="+",
-        default=[".venv", "__pycache__","prompts","scripts","db"],
+        default=[".venv", "__pycache__"],
         help='Directory names to exclude (default: [".venv", "__pycache__"]). '
              'Example: --exclude-dirs ".git" ".venv" "node_modules"',
     )
