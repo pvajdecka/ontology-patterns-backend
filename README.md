@@ -1,13 +1,13 @@
 ````markdown
 # Ontology-Patterns Backend 🧩
 
-FastAPI micro-service that **suggests OWL shortcut properties (“Pattern 1”) and subclass names (“Pattern 2”)** by routing prompts to multiple Large-Language-Model providers:
+FastAPI micro-service that **suggests OWL shortcut properties (“Pattern 1”) and subclass names (“Pattern 2”)** by routing prompts to several LLM providers:
 
-* **OpenAI** (`gpt-4o`, `gpt-3.5-turbo`, …)  
-* **Ollama** (`llama-3.*-instruct`, …)  
+* **OpenAI** (`gpt-4o`, `gpt-3.5-turbo`, …)
+* **Ollama** (`llama-3.*-instruct`, …)
 * **Text-Generation-Inference** (`llama-3.1-8b-instruct(fp16)`)
 
-Everything is packaged with **Poetry** for easy dependency management and reproducible builds.
+The whole project is managed with **Poetry** for clean dependency resolution and reproducible installs.
 
 ---
 
@@ -15,15 +15,16 @@ Everything is packaged with **Poetry** for easy dependency management and reprod
 
 ```text
 backend/
-├── __main__.py          # FastAPI application
+├── __main__.py          # FastAPI application entry-point
 └── utils/
-    └── tgi.py           # Text-Generation-Inference helper
+    └── tgi.py           # TGI helper
 prompts/                 # Prompt templates + JSON output schemas
-pyproject.toml           # Poetry configuration (deps, tooling)
-.env.example             # Sample environment file
-README.md                # You are here
+pyproject.toml           # Poetry configuration
+.env.example             # Sample env file
+README.md
 LICENSE
-````
+```
+
 
 ---
 
@@ -127,6 +128,3 @@ The container runs the same Poetry environment internally.
 ## License
 
 MIT – see **LICENSE** for details.
-
-```
-```
